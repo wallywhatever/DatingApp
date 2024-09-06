@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "ngx-toaster": "^1.0.1",
+    "ngx-toastr": "^19.0.0"
+  }
+}
