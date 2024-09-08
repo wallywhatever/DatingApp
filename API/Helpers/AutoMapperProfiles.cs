@@ -15,5 +15,6 @@ public class AutoMapperProfiles : Profile
         .ForMember(d => d.PhotoUrl, o =>
              o.MapFrom(s => s.Photos.FirstOrDefault(x => x.IsMain)!.Url)); // null forgiving is used here because automapper will take care of it if its null but the compiler doesnt know that
         CreateMap<Photo, PhotoDto>();
+        CreateMap<MemberUpdateDto, AppUser>();
     }
 }
