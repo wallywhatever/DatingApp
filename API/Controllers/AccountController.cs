@@ -18,24 +18,25 @@ public class AccountController(DataContext context, ITokenService tokenService) 
     {
 
         if (await UserExists(registerDto.Username)) return BadRequest("Username is taken");
-        
-        using var hmac = new HMACSHA512(); // using calls the GC to clean up the variable once it goes out of scope
+        return Ok();
 
-        var user = new AppUser 
-        {
-            UserName = registerDto.Username.ToLower(),
-            PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-            PasswordSalt = hmac.Key
-        };
+        // using var hmac = new HMACSHA512(); // using calls the GC to clean up the variable once it goes out of scope
 
-        context.Users.Add(user);
-        await context.SaveChangesAsync();
+        // var user = new AppUser 
+        // {
+        //     UserName = registerDto.Username.ToLower(),
+        //     PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
+        //     PasswordSalt = hmac.Key
+        // };
 
-        return new UserDto 
-        {
-            Username = user.UserName,
-            Token = tokenService.CreateToken(user)
-        };
+        // context.Users.Add(user);
+        // await context.SaveChangesAsync();
+
+        // return new UserDto 
+        // {
+        //     Username = user.UserName,
+        //     Token = tokenService.CreateToken(user)
+        // };
     }
 
     [HttpPost("Login")]
@@ -54,7 +55,7 @@ public class AccountController(DataContext context, ITokenService tokenService) 
             if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid Password");
         }
 
-        return new UserDto 
+        return new UserDto
         {
             Username = user.UserName,
             Token = tokenService.CreateToken(user)
