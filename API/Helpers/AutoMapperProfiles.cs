@@ -11,10 +11,12 @@ public class AutoMapperProfiles : Profile
     public AutoMapperProfiles()
     {
         CreateMap<AppUser, MemberDto>()
-        .ForMember(d => d.Age, o => o.MapFrom(s => s.DateOfBirth.CalculateAge()))
-        .ForMember(d => d.PhotoUrl, o =>
+            .ForMember(d => d.Age, o => o.MapFrom(s => s.DateOfBirth.CalculateAge()))
+            .ForMember(d => d.PhotoUrl, o =>
              o.MapFrom(s => s.Photos.FirstOrDefault(x => x.IsMain)!.Url)); // null forgiving is used here because automapper will take care of it if its null but the compiler doesnt know that
         CreateMap<Photo, PhotoDto>();
         CreateMap<MemberUpdateDto, AppUser>();
+        CreateMap<RegisterDto, AppUser>();
+        CreateMap<string, DateOnly>().ConvertUsing(s => DateOnly.Parse(s));
     }
 }
