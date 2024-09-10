@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, output } from '@angular/core';
 import {
   AbstractControl,
+  FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
@@ -20,6 +21,7 @@ import { TextInputComponent } from "../_forms/text-input/text-input.component";
   styleUrl: './register.component.css',
 })
 export class RegisterComponent implements OnInit {
+  private fb = inject(FormBuilder);
   private accountService = inject(AccountService);
   // usersFromHomeComponent = input.required<any>();
   //@Output() cancelRegister = new EventEmitter(); old way
@@ -33,17 +35,17 @@ export class RegisterComponent implements OnInit {
   }
 
   initializeForm() {
-    this.registerForm = new FormGroup({
-      username: new FormControl('', Validators.required),
-      password: new FormControl('', [
+    this.registerForm = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', [
         Validators.required,
         Validators.minLength(4),
         Validators.maxLength(8),
-      ]),
-      confirmPassword: new FormControl('', [
+      ]],
+      confirmPassword: ['', [
         Validators.required,
         this.matchValues('password'),
-      ]),
+      ]],
     });
     // if the password field changes, recheck the validity of the confirmPassword validator
     this.registerForm.controls['password'].valueChanges.subscribe({
