@@ -43,7 +43,7 @@ public class UserRepository(DataContext context, IMapper mapper) : IUserReposito
         };
 
         return await PagedList<MemberDto>
-            .CreateAsync(query.ProjectTo<MemberDto>(mapper.ConfigurationProvider), userParams.pageNumber, userParams.PageSize);
+            .CreateAsync(query.ProjectTo<MemberDto>(mapper.ConfigurationProvider), userParams.PageNumber, userParams.PageSize);
 
     }
 
