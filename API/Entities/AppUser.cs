@@ -20,8 +20,10 @@ public class AppUser
     public required string City { get; set; }
     public required string Country { get; set; }
     public List<Photo> Photos { get; set; } = [];
+    public List<UserLike> LikedByUsers { get; set; } = [];
+    public List<UserLike> LikedUsers { get; set; } = [];
 
-// This is specifcally called GetAge because automapper will find methods with GetName and map them to Name properties
+    // This is specifcally called GetAge because automapper will find methods with GetName and map them to Name properties
     // public int GetAge()
     // {
     //     return DateOfBirth.CalculateAge();
