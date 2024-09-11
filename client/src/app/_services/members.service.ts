@@ -1,11 +1,10 @@
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
-import { inject, Inject, Injectable, model, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Member } from '../_models/member';
-import { of, tap } from 'rxjs';
+import { of } from 'rxjs';
 import { Photo } from '../_models/photo';
 import { PaginatedResult } from '../_models/pagintation';
-import { parseDate } from 'ngx-bootstrap/chronos';
 import { UserParams } from '../_models/UserParams';
 import { AccountService } from './account.service';
 
@@ -20,14 +19,16 @@ export class MembersService {
   paginatedResult = signal<PaginatedResult<Member[]> | null>(null);
   memberCache = new Map();
   user = this.accountService.currentUser();
-  userParams = signal<UserParams>(new UserParams(this.user))
+  userParams = signal<UserParams>(new UserParams(this.user));
 
   resetUserParams() {
     this.userParams.set(new UserParams(this.user));
   }
 
   getMembers() {
-    const response = this.memberCache.get(Object.values(this.userParams()).join('-'));
+    const response = this.memberCache.get(
+      Object.values(this.userParams()).join('-')
+    );
 
     if (response) return this.setPaginatedResponse(response);
 
@@ -46,7 +47,10 @@ export class MembersService {
       .subscribe({
         next: (response) => {
           this.setPaginatedResponse(response);
-          this.memberCache.set(Object.values(this.userParams()).join('-'), response);
+          this.memberCache.set(
+            Object.values(this.userParams()).join('-'),
+            response
+          );
         },
       });
   }
@@ -72,9 +76,9 @@ export class MembersService {
       .reduce((arr, elem) => arr.concat(elem.body), [])
       .find((m: Member) => m.username == username);
 
-      if (member) return of(member);
-      
-      return this.http.get<Member>(this.baseUrl + 'users/' + username);
+    if (member) return of(member);
+
+    return this.http.get<Member>(this.baseUrl + 'users/' + username);
   }
 
   updateMember(member: Member) {
