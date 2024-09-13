@@ -13,7 +13,7 @@ public static class IdentityExtensionServices
     public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
     {
         // AddIdentityCore service provides the UserManager service by default
-        services.AddIdentityCore<AppUser>(options => 
+        services.AddIdentityCore<AppUser>(options =>
         {
             options.Password.RequireNonAlphanumeric = false;
         })
@@ -24,7 +24,7 @@ public static class IdentityExtensionServices
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
     {
         var tokenKey = config["TokenKey"] ?? throw new Exception("TokenKey not found");
-        options.TokenValidationParameters = new TokenValidationParameters 
+        options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey)),
@@ -32,6 +32,11 @@ public static class IdentityExtensionServices
             ValidateAudience = false
         };
     });
+
+        services.AddAuthorizationBuilder()
+            .AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"))
+            .AddPolicy("ModeratePhotoRole", policy => policy.RequireRole("Admin", "Moderator"));
+
         return services;
     }
 }

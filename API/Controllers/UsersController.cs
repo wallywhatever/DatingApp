@@ -14,17 +14,19 @@ namespace API.Controllers;
 [Authorize]
 public class UsersController(IUserRepository userRepository, IMapper mapper, IPhotoService photoService) : BaseApiController
 {
+
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
+    public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery] UserParams userParams)
     {
         userParams.CurrentUsername = User.GetUserName();
-        
+
         var users = await userRepository.GetMembersAsync(userParams);
 
         Response.AddPaginationHeader(users);
 
         return Ok(users);
     }
+
 
     [HttpGet("{username}")] // /api/users/1
     public async Task<ActionResult<MemberDto>> GetUser(string username)
@@ -70,9 +72,9 @@ public class UsersController(IUserRepository userRepository, IMapper mapper, IPh
         };
 
         if (user.Photos.Count == 0) photo.IsMain = true;
-        
+
         user.Photos.Add(photo);
-        
+
 
         if (await userRepository.SaveAllAsync())
             return CreatedAtAction(nameof(GetUser),
