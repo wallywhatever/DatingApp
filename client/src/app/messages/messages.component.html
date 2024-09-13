@@ -67,15 +67,17 @@ messageService.paginatedResult()?.items?.length === 0) {
         </div>
       </td>
       <td>{{ message.messageSent | timeago }}</td>
-      <td><button class="btn btn-danger">Delete</button></td>
+      <td (click)="$event.stopPropagation()">
+        <button (click)="deleteMessage(message.id)" class="btn btn-danger">
+          Delete
+        </button>
+      </td>
     </tr>
 
     }
   </tbody>
 </table>
-} 
-
-@if (messageService.paginatedResult()?.pagination &&
+} @if (messageService.paginatedResult()?.pagination &&
 messageService.paginatedResult()?.pagination?.totalItems! > 0 ) {
 <div class="d-flex justify-content-center">
   <pagination

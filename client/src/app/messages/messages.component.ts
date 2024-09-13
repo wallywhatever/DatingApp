@@ -10,7 +10,13 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 @Component({
   selector: 'app-messages',
   standalone: true,
-  imports: [ButtonsModule, FormsModule, TimeagoModule, RouterLink, PaginationModule],
+  imports: [
+    ButtonsModule,
+    FormsModule,
+    TimeagoModule,
+    RouterLink,
+    PaginationModule,
+  ],
   templateUrl: './messages.component.html',
   styleUrl: './messages.component.css',
 })
@@ -32,6 +38,24 @@ export class MessagesComponent implements OnInit {
       this.container
     );
   }
+
+  deleteMessage(id: number) {
+    this.messageService.deleteMessage(id).subscribe({
+      next: () => {
+        this.messageService.paginatedResult.update((prev) => {
+          if (prev && prev.items) {
+            prev.items.splice(
+              prev.items.findIndex((m) => m.id === id),
+              1
+            );
+            return prev;
+          }
+          return prev;
+        });
+      },
+    });
+  }
+
   pageChanged(event: any) {
     if (this.pageChanged !== event.page) {
       this.pageNumber == event.page;
