@@ -1,14 +1,11 @@
 using System;
 using API.Extensions;
+using Microsoft.AspNetCore.Identity;
 
 namespace API.Entities;
 
-public class AppUser
+public class AppUser : IdentityUser<int>
 {
-    public int Id { get; set; }
-    public required string UserName { get; set; }
-    public byte[] PasswordHash { get; set; } = [];
-    public byte[] PasswordSalt { get; set; } = [];
     public DateOnly DateOfBirth { get; set; }
     public required string KnownAs { get; set; }
     public DateTime Created { get; set; } = DateTime.UtcNow;
@@ -27,9 +24,7 @@ public class AppUser
 
     public List<Message> MessagesRecieved { get; set; } = [];
 
-    // This is specifcally called GetAge because automapper will find methods with GetName and map them to Name properties
-    // public int GetAge()
-    // {
-    //     return DateOfBirth.CalculateAge();
-    // }
+    public ICollection<AppUserRole> UserRoles { get; set; } = [];
+
+
 }
