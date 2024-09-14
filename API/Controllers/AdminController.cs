@@ -19,7 +19,7 @@ public class AdminController(UserManager<AppUser> userManager) : BaseApiControll
             {
                 x.Id,
                 Username = x.UserName,
-                Role = x.UserRoles.Select(r => r.Role.Name).ToList()
+                Roles = x.UserRoles.Select(r => r.Role.Name).ToList()
             }).ToListAsync();
 
         return Ok(users);
